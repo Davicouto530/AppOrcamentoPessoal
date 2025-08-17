@@ -95,10 +95,18 @@ function cadastrarDespesas() {
     // Verificando se o método que está dentro do obj "despesa" é true, se for, faz o cadastro da despesa no localStorage
     if (despesa.validarDados()) {
         // Chamando o obj que tem o método que armazena os dados no localStorage, e passando os dados que estão no objeto de classe como parâmetro
-        // bd.gravar(despesa);
+        bd.gravar(despesa);
         console.log('Dados válidos');
+
+        // Usando jQuery 
+        // Exibindo o modal de sucesso quando o usuário cadastrar as informações
+        $('#sucessoGravacao').modal('show')
     } else {
         // Se o método que verifica se os inputs estão preenchidos retornar "false", vem aqui para o "else"
         console.log('Dados inválidos');
+
+        // Usando jQuery 
+        // Exibindo o modal de erro quando o usuário tenta adicionar sem ter preenchido o formulário
+        $('#erroGravacao').modal('show')
     }
 }
