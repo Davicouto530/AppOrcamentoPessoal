@@ -92,6 +92,11 @@ function cadastrarDespesas() {
         valor.value
     )
 
+    // Pegando as tags HTML que estão no modal que irão ser escritas dinâmicamente
+    let modal_title = document.getElementById('exampleModalLabel');
+    let modalBody = document.getElementById('modalBody');
+    let buttonVoltar = document.getElementById('buttonVoltar');
+
     // Verificando se o método que está dentro do obj "despesa" é true, se for, faz o cadastro da despesa no localStorage
     if (despesa.validarDados()) {
         // Chamando o obj que tem o método que armazena os dados no localStorage, e passando os dados que estão no objeto de classe como parâmetro
@@ -100,13 +105,37 @@ function cadastrarDespesas() {
 
         // Usando jQuery 
         // Exibindo o modal de sucesso quando o usuário cadastrar as informações
-        $('#sucessoGravacao').modal('show')
+        $('#modalRegistroDespesa').modal('show')
+
+        // Escrevendo as mensagens de sucesso no modal nas tags do html quando for preenchido todos os campos
+        modal_title.innerHTML = 'Registro inserido com sucesso';
+        modal_title.className = 'modal-title fs-5 text-success';
+        // Atribuindo as classes que já existiam na tag que estamos pegando do html, e colocando a nova classe para cor do texto "text-success" de sucesso
+
+        modalBody.innerHTML = 'Despesa foi cadastrada com sucesso!';
+
+        buttonVoltar.innerHTML = 'Voltar';
+        buttonVoltar.className = 'btn btn-success';
+        // Atribuindo as classes que já existiam na tag que estamos pegando do html, e colocando a nova classe para cor do botão "btn-success" de sucesso
+
     } else {
         // Se o método que verifica se os inputs estão preenchidos retornar "false", vem aqui para o "else"
         console.log('Dados inválidos');
 
         // Usando jQuery 
         // Exibindo o modal de erro quando o usuário tenta adicionar sem ter preenchido o formulário
-        $('#erroGravacao').modal('show')
+        $('#modalRegistroDespesa').modal('show')
+
+        // Escrevendo as mensagens de sucesso no modal nas tags do html quando for preenchido todos os campos
+        modal_title.innerHTML = 'Erro na inclusão do registro';
+        modal_title.className = 'modal-title fs-5 text-danger';
+        // Atribuindo as classes que já existiam na tag que estamos pegando do html, e colocando a nova classe para cor do texto "text-danger" de erro
+
+        modalBody.innerHTML = 'Existe campos obrigatórios que não foram preenchidos';
+
+        buttonVoltar.innerHTML = 'Voltar e corrigir';
+
+        buttonVoltar.className = 'btn btn-danger';
+        // Atribuindo as classes que já existiam na tag que estamos pegando do html, e colocando a nova classe para cor do botão "btn-danger" de erro
     }
 }
