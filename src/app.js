@@ -8,7 +8,24 @@ class Despesas {
         this.tipo = tipo
         this.descricao = descricao
         this.valor = valor
-        // Definindo os atributos da classe, e atribuindo os valores que estão vindo dos inputs
+        // Definindo os atributos da classe, e atribuindo os valores que estão sendo recebidos como parâmetros
+    }
+
+    // Método que valida se os dados dos inputs foram preenchidos ou não
+    validarDados() {
+
+        // Percorrendo todos os atributos do obj "Despesa" para verificar se todos estão preenchidos.
+        // O "i" acessa todos os atributos do obj e o "this" faz referência ao próprio obj "Despesa"
+        for (let i in this) {
+
+            // Passando e verificando se os atributos que estão dentro do obj são "undefined", vazio ou "null", que indica que não foram preenchidos
+            if (this[i] == undefined || this[i] == '' || this[i] == null) {
+                return false; // Se for verdadeiro qualquer uma das coisas acima, vai retornar "false"
+            }
+        }
+
+        return true;
+        // Se não for verdadeira nenhuma das verificações acima, vai retornar "true" lá para verificação na função "cadastrarDespesas" aonde está sendo chamado o método
     }
 }
 
@@ -20,9 +37,9 @@ class Bd {
         let id = localStorage.getItem('id');
 
         // Se "id" for igual a "null"
-        if(id === null) {
+        if (id === null) {
             localStorage.setItem('id', 0);
-            // Ele vai colocar como 0 o id mesmo que não tenha cadastrado nada
+            // Ele inicia o id como 0 caso não exista nenhum cadastro ainda
         }
     }
 
@@ -35,22 +52,23 @@ class Bd {
 
     // Método que irá armazenar os dados cadastrados no localStorage, e pegando os dados via o objeto com o "d" dentro dos parenteses
     gravar(d) {
-        
+
         // Colocando a função que recupera os id dentro da variável "id", para depois passar ela para dentro do localStorage
         let id = this.getProximoId();
 
         // Passando o primeiro parâmetro que é o nome do que vai ser armazenado, que é a chave "id"
         // E o segundo parâmetro é o que tá vindo da variável "d", que é os valores dos inputs
-        // E fazendo o localStorage, que irá armazenar os dados cadastrados no servidor do navegador
+        // E fazendo o localStorage armazenar os dados cadastrados no navegador
         localStorage.setItem(id, JSON.stringify(d));
 
         // Passando o primeiro parâmetro que é o nome do que vai ser armazenado, que é a chave "id"
         // E o segundo parâmetro é o que tá vindo da variável "id", que é o método que está recuprando os "id"
-        // E fazendo o localStorage, que irá armazenar os dados cadastrados no servidor do navegador
+        // E fazendo o localStorage armazenar os dados cadastrados no navegador
         localStorage.setItem('id', id);
     }
 }
 
+// Instanciando a classe "Bd"
 let bd = new Bd();
 
 // Função que cadastra os valores dos inputs
@@ -74,6 +92,13 @@ function cadastrarDespesas() {
         valor.value
     )
 
-    // Chamando o obj que tem o método que armazena os dados no localStorage, e passando os dados que estão no objeto de classe como parâmetro
-    bd.gravar(despesa);
+    // Verificando se o método que está dentro do obj "despesa" é true, se for, faz o cadastro da despesa no localStorage
+    if (despesa.validarDados()) {
+        // Chamando o obj que tem o método que armazena os dados no localStorage, e passando os dados que estão no objeto de classe como parâmetro
+        // bd.gravar(despesa);
+        console.log('Dados válidos');
+    } else {
+        // Se o método que verifica se os inputs estão preenchidos retornar "false", vem aqui para o "else"
+        console.log('Dados inválidos');
+    }
 }
