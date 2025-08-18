@@ -95,7 +95,7 @@ class Bd {
             despesas.push(despesa);
         }
 
-        return despesas; 
+        return despesas;
         // Retornando para a chamada do método todas as despesas que foram armazenadas no array "despesas"
     }
 }
@@ -182,4 +182,43 @@ function carregaListaDespesas() {
     despesas = bd.recuperarTodosRegistros();
 
     console.log(despesas);
+
+    // Selecionando o elemento "tbody" da tabela
+    let listaDespesas = document.getElementById("listaDespesas");
+
+    // <tr>
+    //     <td>15/03/2025</td>
+    //     <td>Alimentação</td>
+    //     <td>Compras do mês</td>
+    //     <td>526,22</td>
+    // </tr>
+
+    // Percorrer o array despesas, listando cada despesa de forma dinâmica
+    despesas.forEach((d) => {
+
+        // Criando a linha "tr" da tabela, com o "insertRow" que cria as linhas na tabela. e colocando dentro da variável "linha", que recebe a linha criada
+        let linha = listaDespesas.insertRow();
+
+        // Criando as colunas "td" da tabela com o "insertCell" que cria as colunas na tabela dentro de "linha". Criando 4, por que vai ter 4 colunas.
+        // Colocando os escritos dentro de cada coluna com o "innerHTML"
+        linha.insertCell(0).innerHTML = `${d.dia}/${d.mes}/${d.ano}`;
+
+        // Ajustar o tipo, o tipo está vindo em números "1,2,3...", então de acordo com o número que vier, vai ser um tipo de despesa
+        switch (d.tipo) {
+            case '1': d.tipo = 'Alimentação'
+                break
+            case '2': d.tipo = 'Educação'
+                break
+            case '3': d.tipo = 'Lazer'
+                break
+            case '4': d.tipo = 'Saúde'
+                break
+            case '5': d.tipo = 'Transporte'
+                break
+        }
+        linha.insertCell(1).innerHTML = d.tipo;
+
+        linha.insertCell(2).innerHTML = d.descricao;
+        linha.insertCell(3).innerHTML = d.valor;
+    })
 }
