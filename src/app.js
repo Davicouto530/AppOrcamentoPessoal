@@ -66,6 +66,38 @@ class Bd {
         // E fazendo o localStorage armazenar os dados cadastrados no navegador
         localStorage.setItem('id', id);
     }
+
+    // Método que recupera todos os registros cadastrados
+    recuperarTodosRegistros() {
+
+        // Array que armazenará as despesas
+        let despesas = [];
+
+        // Recuperando o "id" dos valores com o "getItem" que estão sendo armazenados no "localStorage"
+        let id = localStorage.getItem('id');
+
+        // Recuperando todas as despesas cadastradas em localStorage
+        // Percorrendo os id do localStorage, enquando "i" for menor ou igual ao tantos de "ids" que tem lá, vai percorrer 
+        for (let i = 1; i <= id; i++) {
+
+            // Recuperando os valores das despesas, que estão indo tudo para o "i"
+            // E convertendo para obj literal com "JSON.parse"
+            let despesa = JSON.parse(localStorage.getItem(i));
+
+            // Verificando se existe a possibilidade de haver indices que foram pulados/removidos.
+            // Nestes casos nós vamos pular esses indices.
+            if (despesa === null) {
+                continue;
+                // Se despesa for igual a null, pula para a proxima interação do laço e continua antes que o push daquela despesa seja realizado
+            }
+
+            // Adicionando e armazenando no array "despesas" os valores cadastrados que estão em "despesa"
+            despesas.push(despesa);
+        }
+
+        return despesas; 
+        // Retornando para a chamada do método todas as despesas que foram armazenadas no array "despesas"
+    }
 }
 
 // Instanciando a classe "Bd"
@@ -138,4 +170,16 @@ function cadastrarDespesas() {
         buttonVoltar.className = 'btn btn-danger';
         // Atribuindo as classes que já existiam na tag que estamos pegando do html, e colocando a nova classe para cor do botão "btn-danger" de erro
     }
+}
+
+// Função que irá mostrar as despesas na página "consulta" sempre que a página for carregada
+function carregaListaDespesas() {
+
+    // Criando um array que irá armazenar o array que está vindo do método
+    let despesas = [];
+
+    // Chamando o método "recuperarTodosRegistros" do obj "bd" que recupera os cadastrados, e armazenando no array "despesas"
+    despesas = bd.recuperarTodosRegistros();
+
+    console.log(despesas);
 }
