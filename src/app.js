@@ -98,6 +98,11 @@ class Bd {
         return despesas;
         // Retornando para a chamada do método todas as despesas que foram armazenadas no array "despesas"
     }
+
+    // Método que pesquisa as despesas
+    pesquisar(despesa) {
+        console.log(despesa);
+    }
 }
 
 // Instanciando a classe "Bd"
@@ -133,6 +138,15 @@ function cadastrarDespesas() {
     if (despesa.validarDados()) {
         // Chamando o obj que tem o método que armazena os dados no localStorage, e passando os dados que estão no objeto de classe como parâmetro
         bd.gravar(despesa);
+
+        // Limpando os campos dos inputs depois que cadastrou 
+        ano.value = '';
+        mes.value = '';
+        dia.value = '';
+        tipo.value = '';
+        descricao.value = '';
+        valor.value = '';
+
         console.log('Dados válidos');
 
         // Usando jQuery 
@@ -186,6 +200,7 @@ function carregaListaDespesas() {
     // Selecionando o elemento "tbody" da tabela
     let listaDespesas = document.getElementById("listaDespesas");
 
+    // Exemplo do que é
     // <tr>
     //     <td>15/03/2025</td>
     //     <td>Alimentação</td>
@@ -221,4 +236,22 @@ function carregaListaDespesas() {
         linha.insertCell(2).innerHTML = d.descricao;
         linha.insertCell(3).innerHTML = d.valor;
     })
+}
+
+// Criando a função que irá pesquisar as despesas, função colocada lá no botão no HTML
+function pesquisarDespesa() {
+
+    // Pegando os campos dos inputs
+    let ano = document.getElementById('ano').value;
+    let mes = document.getElementById('mes').value;
+    let dia = document.getElementById('dia').value;
+    let tipo = document.getElementById('tipo').value;
+    let descricao = document.getElementById('descricao').value;
+    let valor = document.getElementById('valor').value;
+
+    // Instanciando a classe "Despesa" e passando os parâmetros que o "constructor" da classe espera
+    let despesa = new Despesas(ano, mes, dia, tipo, descricao, valor);
+
+    // Recuperando a instancia da classe "Bd" e executando o método "pesquisar" dela e passando os valores de "despesa"
+    bd.pesquisar(despesa);
 }
