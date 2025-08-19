@@ -152,7 +152,8 @@ class Bd {
             despesasFiltradas = despesasFiltradas.filter(d => d.valor == despesa.valor)
         }
 
-        console.log(despesasFiltradas);
+        // Devolvendo o array "despesasFiltradas" para quem faz a chamada do método
+        return despesasFiltradas;
     }
 }
 
@@ -237,19 +238,21 @@ function cadastrarDespesas() {
     }
 }
 
-// Função que irá mostrar as despesas na página "consulta" sempre que a página for carregada
-function carregaListaDespesas() {
+// Função que irá mostrar as despesas na página "consulta" sempre que a página for carregada, e o parâmetro "despesa" com um array que irá armazenar se for feita alguma pesquisa, e o parâmetro "filtro = flase", vem da filtragem feita na pesquisa
+function carregaListaDespesas(despesas = [], filtro = false) {
 
-    // Criando um array que irá armazenar o array que está vindo do método
-    let despesas = [];
-
-    // Chamando o método "recuperarTodosRegistros" do obj "bd" que recupera os cadastrados, e armazenando no array "despesas"
-    despesas = bd.recuperarTodosRegistros();
+    // Verificando se o array despesas é igual a 0 ou o filtro é igual a false, se for igual a 0 e false, vai apresentar todos os registros, se não, vai apresentar só os registros que foram pesquisados que estão dentro do array "despesa" que está sendo passado como parâmtro da função
+    if(despesas.length == 0 && filtro == false) {
+        // Chamando o método "recuperarTodosRegistros" do obj "bd" que recupera os cadastrados, e armazenando no array "despesas"
+        despesas = bd.recuperarTodosRegistros();
+    }
 
     console.log(despesas);
 
     // Selecionando o elemento "tbody" da tabela
     let listaDespesas = document.getElementById("listaDespesas");
+    listaDespesas.innerHTML = ''; 
+    // Limpando o tbody da lista, para quando for pesquisar algo, aparecer só o que foi pesquisado na lista, e não adicionar mais uma linha na tabela
 
     // Exemplo do que é
     // <tr>
@@ -304,5 +307,8 @@ function pesquisarDespesa() {
     let despesa = new Despesas(ano, mes, dia, tipo, descricao, valor);
 
     // Recuperando a instancia da classe "Bd" e executando o método "pesquisar" dela e passando os valores de "despesa"
-    bd.pesquisar(despesa);
+    let despesas = bd.pesquisar(despesa);
+
+    // Passando o array filtrado de quando alguém pesquisou algo, e passando "true" para o parâmetro "filtro" da função "carregaListaDespesas"
+    this.carregaListaDespesas(despesas, true);
 }
