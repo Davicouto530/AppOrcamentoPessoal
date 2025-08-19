@@ -101,7 +101,58 @@ class Bd {
 
     // Método que pesquisa as despesas
     pesquisar(despesa) {
+
+        // Criando um array que irá armazenar todos os registros, para depois pesquisar
+        let despesasFiltradas = [];
+
+        // Chamando o método que recupera todos os registro cadastrados e colocando dentro do array
+        despesasFiltradas = this.recuperarTodosRegistros();
+
         console.log(despesa);
+
+        console.log(despesasFiltradas);
+
+        // Aplicando o filtro para: ano, mes, dia tipo, descricao, valor
+
+        // ANO
+        // Verificando se o input ".ano" é diferente de vazio, se for, irá executar o bloco de dentro
+        if (despesa.ano != '') {
+            console.log('filtro de ano');
+            // Colocando o valor atualizado do filter dentro do array de novo. O parâmetro "d" percorre todos os atributos do objeto, e estamos verificando se o atributo ".ano" é igual ao atributo ".ano" que vem de despesa, se "d.ano" for igual á "despesa.ano" que vem do input, irá retornar "true", se não, irá retornar "false"
+            despesasFiltradas = despesasFiltradas.filter(d => d.ano == despesa.ano)
+        }
+
+        // MÊS
+        if (despesa.mes != '') {
+            console.log('filtro de mes');
+            despesasFiltradas = despesasFiltradas.filter(d => d.mes == despesa.mes)
+        }
+
+        // DIA
+        if (despesa.dia != '') {
+            console.log('filtro de dia');
+            despesasFiltradas = despesasFiltradas.filter(d => d.dia == despesa.dia)
+        }
+
+        // TIPO
+        if (despesa.tipo != '') {
+            console.log('filtro de tipo');
+            despesasFiltradas = despesasFiltradas.filter(d => d.tipo == despesa.tipo)
+        }
+
+        // DESCRICAO
+        if (despesa.descricao != '') {
+            console.log('filtro de descricao');
+            despesasFiltradas = despesasFiltradas.filter(d => d.descricao == despesa.descricao)
+        }
+
+        // VALOR
+        if (despesa.valor != '') {
+            console.log('filtro de valor');
+            despesasFiltradas = despesasFiltradas.filter(d => d.valor == despesa.valor)
+        }
+
+        console.log(despesasFiltradas);
     }
 }
 
