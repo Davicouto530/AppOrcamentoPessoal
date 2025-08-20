@@ -374,3 +374,50 @@ function pesquisarDespesa() {
     // Passando o array filtrado de quando alguém pesquisou algo, e passando "true" para o parâmetro "filtro" da função "carregaListaDespesas"
     this.carregaListaDespesas(despesas, true);
 }
+
+function carregaTotalDespesas(despesas = []) {
+
+    if (despesas.length == 0) {
+        // Chamando o método "recuperarTodosRegistros" do obj "bd" que recupera os cadastrados, e armazenando no array "despesas"
+        despesas = bd.recuperarTodosRegistros();
+    }
+
+    // Selecionando o elemento "tbody" da tabela
+    let listaTotalDespesas = document.getElementById('listaTotalDespesas');
+
+    let totalDespesa = 0; // Variável que soma as despesas
+
+    // Percorrer o array despesas, listando cada despesa de forma dinâmica
+    despesas.forEach((d) => {
+
+        // Criando a linha "tr" da tabela, com o "insertRow" que cria as linhas na tabela. e colocando dentro da variável "linha", que recebe a linha criada
+        let linha = listaTotalDespesas.insertRow();
+
+        // Ajustar o tipo, o tipo está vindo em números "1,2,3...", então de acordo com o número que vier, vai ser um tipo de despesa
+        switch (d.tipo) {
+            case '1': d.tipo = 'Alimentação'
+                break
+            case '2': d.tipo = 'Educação'
+                break
+            case '3': d.tipo = 'Lazer'
+                break
+            case '4': d.tipo = 'Saúde'
+                break
+            case '5': d.tipo = 'Transporte'
+                break
+        }
+        linha.insertCell(0).innerHTML = d.tipo;
+
+        // Criando as colunas "td" da tabela com o "insertCell" que cria as colunas na tabela dentro de "linha". Criando 4, por que vai ter 4 colunas.
+        // Colocando os escritos dentro de cada coluna com o "innerHTML"
+        linha.insertCell(1).innerHTML = `${d.dia}/${d.mes}/${d.ano}`;
+
+        // Somando e atribuindo os valores para dentro da variável "totalDespesas"
+        totalDespesa += parseFloat(d.valor); 
+
+        linha.insertCell(2).innerHTML = totalDespesa;
+
+        console.log(totalDespesa)
+
+    })
+}
