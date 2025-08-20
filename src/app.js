@@ -91,6 +91,9 @@ class Bd {
                 // Se despesa for igual a null, pula para a proxima interação do laço e continua antes que o push daquela despesa seja realizado
             }
 
+            // Implementando um atributo novo "id" dentro do obj de despesa e o valor desse atributo é de "i", que percorre cada elemento do obj e vai colocando o valor no atributo.
+            despesa.id = i;
+
             // Adicionando e armazenando no array "despesas" os valores cadastrados que estão em "despesa"
             despesas.push(despesa);
         }
@@ -155,10 +158,23 @@ class Bd {
         // Devolvendo o array "despesasFiltradas" para quem faz a chamada do método
         return despesasFiltradas;
     }
+
+    // Método que remove uma despesa da tabela
+    // Recebe como parâmetro o id do objeto que será removido quando foi clicado
+    remover(id) {
+
+        // Removendo o elemento do localStorage pelo id quando for clicado
+        localStorage.removeItem(id);
+    }
 }
 
 // Instanciando a classe "Bd"
 let bd = new Bd();
+
+// Pegando as tags HTML que estão no modal que irão ser escritas dinâmicamente
+let modal_title = document.getElementById('exampleModalLabel');
+let modalBody = document.getElementById('modalBody');
+let buttonVoltar = document.getElementById('buttonVoltar');
 
 // Função que cadastra os valores dos inputs
 function cadastrarDespesas() {
@@ -180,11 +196,6 @@ function cadastrarDespesas() {
         descricao.value,
         valor.value
     )
-
-    // Pegando as tags HTML que estão no modal que irão ser escritas dinâmicamente
-    let modal_title = document.getElementById('exampleModalLabel');
-    let modalBody = document.getElementById('modalBody');
-    let buttonVoltar = document.getElementById('buttonVoltar');
 
     // Verificando se o método que está dentro do obj "despesa" é true, se for, faz o cadastro da despesa no localStorage
     if (despesa.validarDados()) {
@@ -242,7 +253,7 @@ function cadastrarDespesas() {
 function carregaListaDespesas(despesas = [], filtro = false) {
 
     // Verificando se o array despesas é igual a 0 ou o filtro é igual a false, se for igual a 0 e false, vai apresentar todos os registros, se não, vai apresentar só os registros que foram pesquisados que estão dentro do array "despesa" que está sendo passado como parâmtro da função
-    if(despesas.length == 0 && filtro == false) {
+    if (despesas.length == 0 && filtro == false) {
         // Chamando o método "recuperarTodosRegistros" do obj "bd" que recupera os cadastrados, e armazenando no array "despesas"
         despesas = bd.recuperarTodosRegistros();
     }
@@ -251,7 +262,7 @@ function carregaListaDespesas(despesas = [], filtro = false) {
 
     // Selecionando o elemento "tbody" da tabela
     let listaDespesas = document.getElementById("listaDespesas");
-    listaDespesas.innerHTML = ''; 
+    listaDespesas.innerHTML = '';
     // Limpando o tbody da lista, para quando for pesquisar algo, aparecer só o que foi pesquisado na lista, e não adicionar mais uma linha na tabela
 
     // Exemplo do que é
@@ -289,6 +300,57 @@ function carregaListaDespesas(despesas = [], filtro = false) {
 
         linha.insertCell(2).innerHTML = d.descricao;
         linha.insertCell(3).innerHTML = d.valor;
+
+        // Criar botão de excluir uma despesa
+        // Criando um elemento html "button" via JS
+        let btn = document.createElement("button");
+
+        // Colocando classe do bootstrap no elemento que está sendo criado
+        btn.className = 'btn btn-danger';
+
+        // Colocando um icone como conteúdo do botão
+        btn.innerHTML = '<i class="fas fa-times"></i>';
+
+        // Estamos acessando o atributo "id" do obj despesa, e estamos associando esse "d.id" como valor do botão
+        btn.id = `id_despesa_${d.id}`;
+
+        // Adicionando no elemento do botão uma ação de "onclick", que quando clicar no botão, vai executar a função que vai remover a despesa da tabela.
+        btn.onclick = function () {
+
+            // Formatando a string que está vindo do "id" que está sendo pego antes de passar ela como parâmetro
+            // O método "replace" serve para substituir uma string por outra, nesse caso a string "id_despesa_" está sendo substituida por uma string em vazio
+            let id = this.id.replace('id_despesa_', '');
+
+            // Recuperando o id do elemento que foi clicado
+            // alert(id);
+
+            // ----- Modal de quando excluir -----
+            // Usando jQuery 
+            // Exibindo o modal de sucesso quando o usuário excluir uma despesa
+            $('#modalRegistroDespesa').modal('show')
+
+            // Escrevendo as mensagens de sucesso no modal nas tags do html quando for excluído uma despesa
+            modal_title.innerHTML = 'Registro excluído com sucesso';
+            modal_title.className = 'modal-title fs-5 text-black';
+            // Atribuindo as classes que já existiam na tag que estamos pegando do html, e colocando a nova classe para cor do texto "text-success"
+
+            modalBody.innerHTML = 'Despesa foi excluída com sucesso!';
+
+            buttonVoltar.innerHTML = 'Voltar';
+            buttonVoltar.className = 'btn btn-primary';
+            // Atribuindo as classes que já existiam na tag que estamos pegando do html, e colocando a nova classe para cor do botão "btn-success"
+
+            // Chamando o método da classe "Bd" que irá remover do localStorage, e passando como parâmetro o "id" do elemento que foi clicado e que será removido.
+            bd.remover(id);
+
+            // Removendo a linha após clicar no botão e exibir o modal
+            linha.remove()
+        }
+
+        // Criando uma quarta coluna na tabela e colocando dentro dela o elemento de botão que está sendo criado. 
+        linha.insertCell(4).append(btn);
+
+        console.log(d)
     })
 }
 
