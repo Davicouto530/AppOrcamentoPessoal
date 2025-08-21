@@ -385,39 +385,40 @@ function carregaTotalDespesas(despesas = []) {
     // Selecionando o elemento "tbody" da tabela
     let listaTotalDespesas = document.getElementById('listaTotalDespesas');
 
-    let totalDespesa = 0; // Variável que soma as despesas
+    // Objeto que guarda o total de cada tipo de despesa, iniciando todos em 0
+    let despesasTotal = {
+        'Alimentação': 0,
+        'Educação': 0,
+        'Lazer': 0,
+        'Saúde': 0,
+        'Transporte': 0
+    }
 
-    // Percorrer o array despesas, listando cada despesa de forma dinâmica
+    // Percorrendo todas as despesas cadastradas
     despesas.forEach((d) => {
 
-        // Criando a linha "tr" da tabela, com o "insertRow" que cria as linhas na tabela. e colocando dentro da variável "linha", que recebe a linha criada
+        // Convertendo o número do tipo para o texto correspondente
+        switch (d.tipo) {
+            case '1': d.tipo = 'Alimentação'; break;
+            case '2': d.tipo = 'Educação'; break;
+            case '3': d.tipo = 'Lazer'; break;
+            case '4': d.tipo = 'Saúde'; break;
+            case '5': d.tipo = 'Transporte'; break;
+        }
+
+        // Somando o valor da despesa no acumulador do tipo correspondente
+        despesasTotal[d.tipo] += parseFloat(d.valor);
+    });
+
+    // Criando as linhas da tabela com os totais de cada tipo
+    for (let tipo in despesasTotal) {
+        // Criando uma nova linha para cada tipo
         let linha = listaTotalDespesas.insertRow();
 
-        // Ajustar o tipo, o tipo está vindo em números "1,2,3...", então de acordo com o número que vier, vai ser um tipo de despesa
-        switch (d.tipo) {
-            case '1': d.tipo = 'Alimentação'
-                break
-            case '2': d.tipo = 'Educação'
-                break
-            case '3': d.tipo = 'Lazer'
-                break
-            case '4': d.tipo = 'Saúde'
-                break
-            case '5': d.tipo = 'Transporte'
-                break
-        }
-        linha.insertCell(0).innerHTML = d.tipo;
+        // Primeira célula: o nome do tipo da despesa
+        linha.insertCell(0).innerHTML = tipo;
 
-        // Criando as colunas "td" da tabela com o "insertCell" que cria as colunas na tabela dentro de "linha". Criando 4, por que vai ter 4 colunas.
-        // Colocando os escritos dentro de cada coluna com o "innerHTML"
-        linha.insertCell(1).innerHTML = `${d.dia}/${d.mes}/${d.ano}`;
-
-        // Somando e atribuindo os valores para dentro da variável "totalDespesas"
-        totalDespesa += parseFloat(d.valor); 
-
-        linha.insertCell(2).innerHTML = totalDespesa;
-
-        console.log(totalDespesa)
-
-    })
+        // Segunda célula: o valor total acumulado do tipo, formatado com 2 casas decimais
+        linha.insertCell(1).innerHTML = despesasTotal[tipo].toFixed(2);
+    }
 }
